@@ -6,6 +6,7 @@ First, run the development server:
 
 ```bash
 # Install 
+npm install -g gatsby-cli
 npm install
 # RUN
 npm run dev
