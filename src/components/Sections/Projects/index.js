@@ -21,7 +21,7 @@ const Projects = () => {
         <ul className="group/list">
           {language === "nl" ? (
             <>
-              <ProjectCard
+              {/* <ProjectCard
                 name={"Cumpleanito"}
                 description={
                   "Cumpleanito es un proyecto para cargar los cumpleaños de tus amigos y familiares y que puedas verificar cuando se acerque el día de su cumpleaños. "
@@ -38,11 +38,11 @@ const Projects = () => {
                 image={"propinapp.png"}
                 technologies={["Next.js", "ChakraUI", "TypeScript"]}
                 url={"https://propinapp-2.vercel.app/"}
-              />
+              /> */}
               <ProjectCard
                 name={"Portfolio"}
                 description={
-                  "Portfolio es mi portafolio personal, donde puedes ver mis proyectos y contactarme."
+                  "Portfolio is mijn persoonlijke portfolio, waar u mijn projecten kunt zien en contact met mij kunt opnemen"
                 }
                 image={"portfolio.png"}
                 technologies={["Next.js", "TailwindCSS", "JavaScript"]}
@@ -51,7 +51,7 @@ const Projects = () => {
             </>
           ) : (
             <>
-              <ProjectCard
+              {/* <ProjectCard
                 name={"Cumpleanito"}
                 description={
                   "Cumpleanito is a project to load the birthdays of your friends and family and that you can verify when their birthday is approaching."
@@ -68,7 +68,7 @@ const Projects = () => {
                 image={"propinapp.png"}
                 technologies={["Next.js", "ChakraUI", "TypeScript"]}
                 url={"https://landing.propinita.app"}
-              />
+              /> */}
               <ProjectCard
                 name={"Portfolio"}
                 description={
@@ -76,7 +76,7 @@ const Projects = () => {
                 }
                 image={"portfolio.png"}
                 technologies={["Next.js", "TailwindCSS", "JavaScript"]}
-                url={"https://francocampaiola.com"}
+                url={"https://ajithreddy.com"}
               />
             </>
           )}
