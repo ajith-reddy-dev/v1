@@ -1,16 +1,18 @@
 let languagesObject = {
     en: {
-        jobDescription: 'Frontend developer',
-        // jobDescription_a: 'I build pixel-perfect, accessible products for the web and beyond.',
-        // about_p1: 'Back in 2012, I decided to try my hand at creating custom Tumblr themes and tumbled head first into the rabbit hole of coding and web development. Fast-forward to today, and I’ve had the privilege of building software for an ... ',
-        // about_p2: 'My main focus these days is building products and leading projects for our clients at . In my free time Ive also released an that covers everything you need to know to build a web app with the Spotify API.',
-        // about_p3: 'When I’m not at the computer, I’m usually rock climbing, hanging out with my wife and two cats, or running around Hyrule searching for ..'
+        jobDescription: 'Devops Engineer',
+        // As a passionate DevOps Engineer with 6 years of experience, I specialize in streamlining the development and deployment process to enhance productivity and ensure seamless system reliability.',
+        // about_p1: With expertise in CI/CD pipelines, cloud infrastructure (AWS, Azure), and containerization (Docker, Kubernetes), I work to build scalable, automated systems that drive business success. 
+        // about_p2: My focus is on infrastructure as code using Terraform and Python (CDK), ensuring that everything from provisioning to monitoring is optimized.'
+        // about_p3: I am driven by the challenge of improving software quality through automation and collaboration.With that moto Currently i work in Booking.com as a DevOps Engineer.
+
+
     },
-    es: {
-        jobDescription: 'Desarrollador web frontend',
-        // jobDescription_a: 'I build pixel-perfect, accessible products for the web and beyond.',
-        // about_p1: 'Back in 2012, I decided to try my hand at creating custom Tumblr themes and tumbled head first into the rabbit hole of coding and web development. Fast-forward to today, and I’ve had the privilege of building software for an ... ',
-        // about_p2: 'My main focus these days is building products and leading projects for our clients at . In my free time Ive also released an that covers everything you need to know to build a web app with the Spotify API.',
-        // about_p3: 'When I’m not at the computer, I’m usually rock climbing, hanging out with my wife and two cats, or running around Hyrule searching for ..'
+    nl: {
+        jobDescription: 'Devops Ingenieur',
+        // Als gepassioneerde DevOps Engineer ben ik gespecialiseerd in het stroomlijnen van het ontwikkel- en implementatieproces om de productiviteit te verbeteren en naadloze systeembetrouwbaarheid te waarborgen. automatisering en samenwerking.
+        // about_p1: Met expertise in CI/CD-pijplijnen, cloudinfrastructuur (AWS, Azure) en containerisatie (Docker, Kubernetes) werk ik aan het bouwen van schaalbare, geautomatiseerde systemen die zakelijke successen aandrijven.
+        // about_p2:  Mijn focus ligt op infrastructuur als code met Terraform en Python (CDK), waarbij alles van provisioning tot monitoring wordt geoptimaliseerd..',
+        // about_p3: 'Ik word gedreven door de uitdaging om softwarekwaliteit te verbeteren door middel van automatisering en samenwerking. Met dat motto werk ik momenteel bi Booking.com als Devops Engineer'
     },
 }
