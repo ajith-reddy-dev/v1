@@ -53,13 +53,13 @@ const Footer = () => {
             </a>
             , desplegado con{" "}
             <a
-              href="https://vercel.com/"
+              href="https://www.netlify.com/"
               className="font-medium text-slate-400 hover:text-teal-300 focus-visible:text-teal-300"
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="Vercel (abriéndose en una nueva pestaña)"
+              aria-label="netlify (abriéndose en una nueva pestaña)"
             >
-              Vercel
+              Netlify
             </a>
             . Inspirado en el portfolio de{" "}
             <a
@@ -125,7 +125,7 @@ const Footer = () => {
               rel="noreferrer noopener"
               aria-label="netlify (opens in a new tab)"
             >
-              Vercel
+              Netlify
             </a>
             . Inspired in{" "}
             <a
