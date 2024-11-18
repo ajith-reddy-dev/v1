@@ -119,11 +119,11 @@ const Footer = () => {
             </a>
             , deployed with{" "}
             <a
-              href="https://vercel.com/"
+              href="https://www.netlify.com/"
               className="font-medium text-slate-400 hover:text-teal-300 focus-visible:text-teal-300"
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="Vercel (opens in a new tab)"
+              aria-label="netlify (opens in a new tab)"
             >
               Vercel
             </a>
