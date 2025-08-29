@@ -40,7 +40,7 @@ const AboutCard = () => {
       ) : (
         <>
           <p className="mb-4">
-            As a passionate DevOps Engineer with 6 years of experience, I specialize in streamlining the development 
+            As a passionate DevOps Engineer with 8 years of experience, I specialize in streamlining the development 
             and deployment process to enhance productivity and ensure seamless system reliability. 
           </p>
           <p className="mb-4">
