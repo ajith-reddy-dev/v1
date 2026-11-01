@@ -2,7 +2,15 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 export const metadata = {
-  title: "Ajith Venugopal",
+  title: "Ajith Venugopal | Site Reliability / Infrastructure Engineer",
+  description:
+    "Site reliability and infrastructure engineer with 7+ years keeping high-traffic systems alive. Kubernetes (CKA, CKS), Terraform, AWS, and the observability that catches failures before users do.",
+  openGraph: {
+    title: "Ajith Venugopal | Site Reliability / Infrastructure Engineer",
+    description:
+      "Kubernetes, Terraform, AWS and observability at scale. Currently keeping hotels and flights reliable at Booking.com.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {
