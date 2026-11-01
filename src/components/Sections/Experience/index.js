@@ -137,7 +137,7 @@ const Experience = () => {
         {language === "nl" ? (
           <a
             className="inline-flex items-baseline leading-tight hover:text-teal-300 focus-visible:text-teal-300 font-semibold text-slate-200 group/link text-base mb-12 lg:mb-32"
-            href="/cv.pdf"
+            href="/resume.pdf"
             target="_blank"
             rel="noreferrer noopener"
             aria-label="Bekijk volledig cv (opent in een nieuw tabblad)"
