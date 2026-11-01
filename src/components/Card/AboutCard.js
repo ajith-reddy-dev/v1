@@ -11,48 +11,13 @@ const AboutCard = () => {
       {language === "nl" ? (
         <>
           <p className="mb-4">
-          Als gepassioneerde DevOps Engineer ben ik gespecialiseerd in het stroomlijnen van het ontwikkel- en 
-          implementatieproces om de productiviteit te verbeteren en naadloze systeembetrouwbaarheid te waarborgen. 
-          automatisering en samenwerking.
+            Ik houd grote, latency-gevoelige systemen in de lucht &mdash; en steeds vaker ook
+            de GPU- en compute-platforms waarop AI draait. Zeven jaar ervaring in
+            infrastructuur en reliability engineering, van bare-metal datacenters tot
+            productie-Kubernetes op schaal.
           </p>
           <p className="mb-4">
-          Met expertise in CI/CD-pijplijnen, cloudinfrastructuur (AWS, Azure) en containerisatie (Docker, Kubernetes) 
-          werk ik aan het bouwen van schaalbare, geautomatiseerde systemen die zakelijke successen aandrijven. Mijn focus 
-          ligt op infrastructuur als code met Terraform en Python (CDK), waarbij alles van provisioning tot monitoring wordt 
-          geoptimaliseerd.
-          </p>
-          <p>
-          Ik word gedreven door de uitdaging om softwarekwaliteit te verbeteren door middel van automatisering en samenwerking. 
-          Met dat motto werk ik momenteel bi
-          <Link
-              className="font-medium text-slate-200 hover:text-teal-300 focus-visible:text-teal-300"
-              href="https://www.booking.com/content/about.en-gb.html"
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Booking.com (opens in a new tab)"
-            >
-              {" "}
-              Booking.com
-            </Link>
-            {" "} als Devops Engineer
-          </p>
-        </>
-      ) : (
-        <>
-          <p className="mb-4">
-            As a passionate DevOps Engineer with 8 years of experience, I specialize in streamlining the development 
-            and deployment process to enhance productivity and ensure seamless system reliability. 
-          </p>
-          <p className="mb-4">
-            With expertise in CI/CD pipelines, cloud infrastructure (AWS, Azure), and containerization 
-            (Docker, Kubernetes), I work to build scalable, automated systems that drive business success.
-             My focus is on infrastructure as code using Terraform and Python (CDK), ensuring that everything 
-             from provisioning to monitoring is optimized.
-          </p>
-          <p>
-          I am driven by the challenge of improving 
-          software quality through automation and collaboration.With that moto
-          Currently i work in
+            Bij
             <Link
               className="font-medium text-slate-200 hover:text-teal-300 focus-visible:text-teal-300"
               href="https://www.booking.com/content/about.en-gb.html"
@@ -63,7 +28,49 @@ const AboutCard = () => {
               {" "}
               Booking.com
             </Link>
-            {" "} as a DevOps Engineer.
+            {" "} definieer ik SLI&rsquo;s, SLO&rsquo;s, error budgets en alerting voor honderden
+            services verdeeld over meer dan 20 teams. Ik draai productie-Kubernetes (EKS) met
+            autoscaling en topology-aware scheduling, schrijf de Terraform en CDK waaruit nieuwe
+            omgevingen worden gebouwd, en zit de review board voor die na elke storing de
+            vervolgacties bewaakt.
+          </p>
+          <p>
+            Daarvoor beheerde ik meer dan 150 Kubernetes-clusters over bare-metal hardware en
+            cloud, met realtime video binnen een latency-budget van ongeveer 40 milliseconden.
+            Op dat aantal werkt alleen automatisering. Die gewoonte &mdash; uitzoeken waar de
+            milliseconden en de capaciteit blijven &mdash; neem ik mee naar AI-infrastructuur.
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="mb-4">
+            I keep large, latency-sensitive systems alive &mdash; and increasingly the GPU and
+            compute platforms that AI runs on. Seven years in infrastructure and reliability
+            engineering, from bare-metal datacenters to production Kubernetes at scale.
+          </p>
+          <p className="mb-4">
+            At
+            <Link
+              className="font-medium text-slate-200 hover:text-teal-300 focus-visible:text-teal-300"
+              href="https://www.booking.com/content/about.en-gb.html"
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label="Booking.com (opens in a new tab)"
+            >
+              {" "}
+              Booking.com
+            </Link>
+            {" "} I define SLIs, SLOs, error budgets and alerting for hundreds of services across
+            more than 20 engineering teams. I run production Kubernetes (EKS) with autoscaling and
+            topology-aware scheduling, write the Terraform and CDK that new environments are built
+            from, and chair the review board that follows up after every outage.
+          </p>
+          <p>
+            Before that I ran more than 150 Kubernetes clusters across bare-metal hardware and
+            cloud, carrying real-time video inside roughly a 40ms latency budget. At that number
+            nothing works unless it is automated. That habit &mdash; finding where the
+            milliseconds and the capacity actually go &mdash; is what I am bringing to AI
+            infrastructure.
           </p>
         </>
       )}

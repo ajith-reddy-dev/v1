@@ -14,114 +14,120 @@ const Experience = () => {
     >
       <div className="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-slate-900/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
         <h2 className="mb-8 text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only">
-          {language === "nl" ? "Experiencia" : "Experience"}
+          {language === "nl" ? "Ervaring" : "Experience"}
         </h2>
       </div>
       {language === "nl" ? (
         <>
-        <ExperienceCard 
+        <ExperienceCard
           dateInit={"July 2022"}
           dateEnd={"Present"}
-          position={"Devops Enginner"}
-          company={"booking.com"}
+          position={"DevOps Infrastructure Engineer II"}
+          company={"Booking.com"}
           companyUrl={"https://www.booking.com/content/about.en-gb.html"}
           description={
-            "Als DevOps Engineer bij Booking.com beheerde ik cloudinfrastructuur op AWS, waarbij ik zowel de prestaties als de kostenefficiëntie optimaliseerde. Ik automatiseerde CI/CD-pipelines met Gitlab en Terraform, waardoor implementaties en infrastructuurvoorzieningen aanzienlijk werden gestroomlijnd. Ik leidde de migratie naar Docker en Kubernetes, waardoor de schaalbaarheid en betrouwbaarheid van verschillende systemen werden verbeterd. Daarnaast verbeterde ik de mogelijkheden voor monitoring en incidentrespons, wat bijdroeg aan een vermindering van downtime en een hoge beschikbaarheid van het systeem garandeerde."
+            "Ik ben verantwoordelijk voor SLI's, SLO's, error budgets en alerting voor honderden services met veel verkeer, verdeeld over meer dan 20 engineeringteams. Ik draai productie-Kubernetes (EKS) met autoscaling, multi-AZ-resilience en topology-aware scheduling, en schrijf de Terraform-modules en AWS CDK-stacks waaruit nieuwe omgevingen worden gebouwd. Ik leid incident response in een on-call rotatie en zit de review board voor die storingen omzet in permanente oplossingen. Daarnaast verkortte ik de deploytijd met 30% door CI/CD te herstructureren in parallelle en opeenvolgende stages."
           }
           technologies={[
+            "Kubernetes (EKS)",
+            "Terraform",
             "AWS",
-            "Python",
-            "Migration",
-            "Architecting",
-          ]}
-          />
-          <ExperienceCard
-          dateInit={"Sep 2021"}
-          dateEnd={"July 2021"}
-          position={"Devops platform Engineer "}
-          company={"a new spring"}
-          companyUrl={"https://www.anewspring.com/"}
-          description={
-            "Als eenmansteam was ik verantwoordelijk voor de migratie van een platform van een monolithische aanpak naar op containers gebaseerde applicaties naar de cloud (inclusief database), waarbij ik de beste DevOps-praktijken implementeerde."
-          }
-          technologies={[
-            "AWS",
-            "Azure",
-            "Docker",
-            "Python",
-            "Migration",
-            "Training"
-          ]}
-          />
-          <ExperienceCard
-          dateInit={"Apr 2019"}
-          dateEnd={"Aug 2021"}
-          position={"Devops Engineer"}
-          company={"Bluejeans by verizon "}
-          companyUrl={"https://www.verizon.com/"}
-          description={
-          "Bij BlueJeans beheerde ik AWS- en Azure-infrastructuren met Terraform, voorzag ik meer dan 150 Kubernetes-clusters en migreerde ik VM's en databases naar de cloud. Ik orkestreerde Kubernetes-omgevingen (AKS, EKS, Docker Swarm) en bouwde microservice-labomgevingen via Infrastructure as Code. Ik implementeerde robuuste monitoring- en loggingoplossingen met Datadog, New Relic, CloudWatch en Sumo Logic, inclusief aangepaste applicatiecontroles en dashboards. Ik stelde ook OKTA-gebaseerde SSO in voor veilig AWS-toegangsbeheer."
-          }
-          technologies={[
-            "CI/CD platform",
-            "AWS",
-            "Azure",
-            "Monitoring",
-            "Cost optimisation"
-          ]}
-/>
-        </>
-      ) : (
-        <>
-        <ExperienceCard 
-          dateInit={"July 2022"}
-          dateEnd={"Present"}
-          position={"Devops Enginner"}
-          company={"booking.com"}
-          companyUrl={"https://www.booking.com/content/about.en-gb.html"}
-          description={
-            "As a DevOps Engineer at Booking.com, I managed cloud infrastructure on AWS, optimizing both performance and cost efficiency. I automated CI/CD pipelines using Gitlab and Terraform, significantly streamlining deployments and infrastructure provisioning. I led the migration to Docker and Kubernetes, improving scalability and reliability across various systems. Additionally, I enhanced monitoring and incident response capabilities, contributing to a reduction in downtime and ensuring high system availability."
-          }
-          technologies={[
-            "AWS",
-            "Python",
-            "Migration",
-            "Architecting",
+            "SLOs & Observability",
+            "Incident Response",
+            "ArgoCD",
           ]}
         />
         <ExperienceCard
-          dateInit={"Sep 2021"}
-          dateEnd={"July 2021"}
-          position={"Devops platform Engineer "}
-          company={"a new spring"}
+          dateInit={"Aug 2021"}
+          dateEnd={"July 2022"}
+          position={"DevOps Platform Engineer"}
+          company={"aNewSpring"}
           companyUrl={"https://www.anewspring.com/"}
           description={
-            "As a one person team i was in charge of Migrating platform from a monolithic approach to Container based application to Cloud (including database) with implementing DevOps best practices."
+            "Als eenmansteam migreerde ik de volledige stack van een monolithische datacenter-opzet naar gecontaineriseerde Kubernetes (EKS, AKS) op AWS en Azure, inclusief databases. Ik schreef de AWS CDK-stacks en Terraform-modules die de IaC-standaard van de organisatie werden, bouwde CI/CD met ArgoCD naar dev, staging en productie, en trainde de ontwikkelaars in containers, Kubernetes en Helm."
           }
           technologies={[
             "AWS",
             "Azure",
-            "Docker",
-            "Python",
+            "Kubernetes",
+            "AWS CDK",
+            "Terraform",
             "Migration",
-            "Training"
           ]}
         />
-          <ExperienceCard
+        <ExperienceCard
           dateInit={"Apr 2019"}
           dateEnd={"Aug 2021"}
-          position={"Devops Engineer"}
-          company={"Bluejeans by verizon "}
+          position={"DevOps Engineer"}
+          company={"BlueJeans by Verizon"}
           companyUrl={"https://www.verizon.com/"}
           description={
-            "At BlueJeans, managed AWS and Azure infrastructures using Terraform, provisioning over 150 Kubernetes clusters and migrating VMs and databases to the cloud. Orchestrated Kubernetes environments (AKS, EKS, Docker Swarm) and built microservice lab environments through Infrastructure as Code. Implemented robust monitoring and logging solutions using Datadog, New Relic, CloudWatch, and Sumo Logic, including custom application checks and dashboards. Also set up OKTA-based SSO for secure AWS access management."
+            "Ik voorzag en beheerde meer dan 150 Kubernetes-clusters over on-premise bare-metal datacenterhardware en cloud (EKS, AKS), met realtime video binnen een latency-budget van ongeveer 40 milliseconden. Op die schaal moet alles geautomatiseerd zijn: provisioning, lifecycle en node- en agent-health checks die remediatie aansturen. Ik beheerde het volledige cloud-, netwerk-, security- en compute-landschap als Terraform-code, bouwde de monitoring- en loggingstacks op Datadog, New Relic, CloudWatch en Sumo Logic met dashboards-as-code, voerde een AWS-kostenoptimalisatieprogramma uit en zette Okta SSO op met least-privilege IAM."
           }
           technologies={[
-            "CI/CD platform",
+            "150+ K8s Clusters",
+            "Bare Metal",
+            "Terraform",
+            "Datadog",
+            "Low Latency",
+            "Cost Optimisation",
+          ]}
+        />
+        </>
+      ) : (
+        <>
+        <ExperienceCard
+          dateInit={"July 2022"}
+          dateEnd={"Present"}
+          position={"DevOps Infrastructure Engineer II"}
+          company={"Booking.com"}
+          companyUrl={"https://www.booking.com/content/about.en-gb.html"}
+          description={
+            "I own SLIs, SLOs, error budgets and alert design for hundreds of high-throughput services across more than 20 engineering teams. I run production Kubernetes (EKS) with autoscaling, multi-AZ resilience and topology-aware scheduling, and author the Terraform modules and AWS CDK stacks that new environments are built from. I lead incident response on an on-call rotation and chair the corrective-action review board that turns outages into permanent fixes. I also cut deployment time by 30% by restructuring CI/CD into concurrent and downstream stages, and built AI-generated service documentation that saves around 10 engineering hours per team."
+          }
+          technologies={[
+            "Kubernetes (EKS)",
+            "Terraform",
+            "AWS",
+            "SLOs & Observability",
+            "Incident Response",
+            "ArgoCD",
+          ]}
+        />
+        <ExperienceCard
+          dateInit={"Aug 2021"}
+          dateEnd={"July 2022"}
+          position={"DevOps Platform Engineer"}
+          company={"aNewSpring"}
+          companyUrl={"https://www.anewspring.com/"}
+          description={
+            "As a one-person team I migrated the entire company stack from a monolithic, datacenter-hosted setup to containerised Kubernetes (EKS, AKS) across AWS and Azure, databases included. I authored the AWS CDK stacks and Terraform modules that became the organisation's IaC standard, built CI/CD delivering through ArgoCD into dev, staging and production, and trained the developers on containers, Kubernetes and Helm."
+          }
+          technologies={[
             "AWS",
             "Azure",
-            "Monitoring",
-            "Cost optimisation"
+            "Kubernetes",
+            "AWS CDK",
+            "Terraform",
+            "Migration",
+          ]}
+        />
+        <ExperienceCard
+          dateInit={"Apr 2019"}
+          dateEnd={"Aug 2021"}
+          position={"DevOps Engineer"}
+          company={"BlueJeans by Verizon"}
+          companyUrl={"https://www.verizon.com/"}
+          description={
+            "I provisioned and operated more than 150 Kubernetes clusters spanning on-premise bare-metal datacenter hardware and cloud (EKS, AKS), carrying real-time video inside roughly a 40ms latency budget. At that scale everything has to be automated: provisioning, lifecycle, and node and agent health checks feeding remediation. I managed the whole cloud, network, security and compute estate as Terraform code and authored the reusable module library, built the monitoring and logging stacks on Datadog, New Relic, CloudWatch and Sumo Logic with dashboards-as-code, delivered an AWS cost-optimisation programme, and set up Okta SSO with least-privilege IAM."
+          }
+          technologies={[
+            "150+ K8s Clusters",
+            "Bare Metal",
+            "Terraform",
+            "Datadog",
+            "Low Latency",
+            "Cost Optimisation",
           ]}
         />
         </>
@@ -134,12 +140,12 @@ const Experience = () => {
             href="/cv.pdf"
             target="_blank"
             rel="noreferrer noopener"
-            aria-label="Ver CV completo (abriéndose en una nueva pestaña)"
+            aria-label="Bekijk volledig cv (opent in een nieuw tabblad)"
           >
             <span>
-              Ver <span></span>
+              Bekijk <span></span>
               <span className="inline-block">
-                detalle completo
+                volledig cv
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
