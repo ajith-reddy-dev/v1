@@ -16,13 +16,13 @@ const Sidebar = () => {
           </h1>
           <h2 className="mt-3 text-lg font-medium tracking-tight text-slate-200 sm:text-xl">
             {language === "nl"
-              ? "Devops Ingenieur"
-              : "Devops Enginner"}
+              ? "Site Reliability / Infrastructure Engineer"
+              : "Site Reliability / Infrastructure Engineer"}
           </h2>
           <p className="mt-3 max-w-xs leading-normal">
             {language === "nl"
-              ? "Ik bouw microservices en help ontwikkelaars om productieklare applicaties te realiseren met CI/CD met observeerbaarheid"
-              : "I build microservices and help developers to achive production ready application with CI/CD with observability "}
+              ? "Ik houd systemen met veel verkeer betrouwbaar \u2014 Kubernetes, Terraform en observability, en steeds vaker de GPU-platforms waarop AI draait."
+              : "I keep high-traffic systems reliable \u2014 Kubernetes, Terraform and observability, and increasingly the GPU platforms that AI runs on."}
           </p>
           <Menu />
         </div>
