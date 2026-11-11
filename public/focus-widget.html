@@ -115,6 +115,508 @@ footer{font-size:11px; color:var(--muted); letter-spacing:0.02em;}
   .timer-display{width:220px; height:220px;}
   .time-text{font-size:42px;}
 }
+
+@media (min-width:760px){
+  .app{justify-content:center;}
+  header, main{max-width:820px;}
+  .panel{flex-direction:row; align-items:center; justify-content:center; gap:48px;}
+  .duration-presets{flex-direction:column; width:110px;}
+  .duration-presets button{width:100%;}
+  .split-config{flex-direction:column; width:170px;}
+  .timer-display{width:300px; height:300px;}
+  .time-text{font-size:60px;}
+  .cycle-dots{flex-direction:column;}
+  .controls{flex-direction:column; width:150px;}
+  .controls button{width:100%;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">FOCUS</div>
+    <div class="header-actions">
+      <button id="fullscreenToggle" aria-label="Toggle fullscreen">&#9974;</button>
+      <button id="themeToggle" aria-label="Toggle dark and light theme">&#9680;</button>
+    </div>
+  </header>
+
+  <div class="mode-switch" role="tablist">
+    <button class="mode-btn active" data-mode="simple" role="tab" aria-selected="true">Single</button>
+    <button class="mode-btn" data-mode="split" role="tab" aria-selected="false">Split</button>
+  </div>
+
+  <main>
+    <section id="simplePanel" class="panel">
+      <div class="duration-presets" id="simplePresets">
+        <button data-min="15">15</button>
+        <button data-min="25" class="active">25</button>
+        <button data-min="45">45</button>
+        <button data-min="60">60</button>
+        <button class="custom" id="customSimpleBtn">Custom</button>
+      </div>
+      <div class="timer-display">
+        <svg class="ring" viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="ring-progress" id="simpleRing" cx="100" cy="100" r="90"></circle>
+        </svg>
+        <div class="phase-label">Focus</div>
+        <div class="time-text" id="simpleTime">25:00</div>
+      </div>
+      <div class="controls">
+        <button id="simpleStart">Start</button>
+        <button id="simpleReset" class="ghost">Reset</button>
+      </div>
+    </section>
+
+    <section id="splitPanel" class="panel hidden">
+      <div class="split-config">
+        <div class="field">
+          <label for="splitFocus">Focus</label>
+          <input type="number" id="splitFocus" value="50" min="1" max="180">
+        </div>
+        <div class="field">
+          <label for="splitBreak">Break</label>
+          <input type="number" id="splitBreak" value="10" min="1" max="60">
+        </div>
+        <div class="field">
+          <label for="splitCycles">Cycles</label>
+          <input type="number" id="splitCycles" value="4" min="1" max="12">
+        </div>
+      </div>
+      <div class="timer-display">
+        <svg class="ring" viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="ring-progress" id="splitRing" cx="100" cy="100" r="90"></circle>
+        </svg>
+        <div class="phase-label" id="splitPhaseLabel">Focus &middot; 1 of 4</div>
+        <div class="time-text" id="splitTime">50:00</div>
+      </div>
+      <div class="cycle-dots" id="cycleDots"></div>
+      <div class="controls">
+        <button id="splitStart">Start sequence</button>
+        <button id="splitReset" class="ghost">Reset</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>A chime plays at each phase change &middot; keep this tab open</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- theme ----------
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('themeToggle');
+  function applyThemeIcon(){
+    var t = root.getAttribute('data-theme');
+    var isDark = t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    themeBtn.textContent = isDark ? '○' : '●';
+  }
+  try{
+    var saved = localStorage.getItem('focus-split-theme');
+    if(saved === 'dark' || saved === 'light') root.setAttribute('data-theme', saved);
+  }catch(e){}
+  applyThemeIcon();
+  themeBtn.addEventListener('click', function(){
+    var current = root.getAttribute('data-theme');
+    var isDark = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = isDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try{ localStorage.setItem('focus-split-theme', next); }catch(e){}
+    applyThemeIcon();
+  });
+
+  // ---------- fullscreen ----------
+  var fsBtn = document.getElementById('fullscreenToggle');
+  function isFullscreen(){
+    return !!(document.fullscreenElement || document.webkitFullscreenElement);
+  }
+  function updateFsIcon(){
+    fsBtn.textContent = isFullscreen() ? '⤢' : '⛶';
+  }
+  fsBtn.addEventListener('click', function(){
+    try{
+      if(!isFullscreen()){
+        var el = document.documentElement;
+        var req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if(req) req.call(el);
+      } else {
+        var exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if(exit) exit.call(document);
+      }
+    }catch(e){}
+  });
+  document.addEventListener('fullscreenchange', updateFsIcon);
+  document.addEventListener('webkitfullscreenchange', updateFsIcon);
+  updateFsIcon();
+
+  // ---------- audio chime ----------
+  var audioCtx;
+  function chime(){
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      var t0 = audioCtx.currentTime;
+      [880, 1320].forEach(function(freq, i){
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, t0 + i*0.18);
+        gain.gain.exponentialRampToValueAtTime(0.18, t0 + i*0.18 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + i*0.18 + 0.4);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(t0 + i*0.18);
+        osc.stop(t0 + i*0.18 + 0.45);
+      });
+    }catch(e){}
+  }
+
+  var RING_C = 2 * Math.PI * 90;
+
+  function setRing(el, fraction){
+    el.style.strokeDasharray = RING_C.toFixed(2);
+    el.style.strokeDashoffset = (RING_C * (1 - fraction)).toFixed(2);
+  }
+  function fmt(sec){
+    sec = Math.max(0, Math.round(sec));
+    var m = Math.floor(sec/60), s = sec%60;
+    return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  }
+
+  // ---------- mode switch ----------
+  var simplePanel = document.getElementById('simplePanel');
+  var splitPanel = document.getElementById('splitPanel');
+  document.querySelectorAll('.mode-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      if(btn.dataset.mode === 'simple'){ simplePanel.classList.remove('hidden'); splitPanel.classList.add('hidden'); }
+      else { splitPanel.classList.remove('hidden'); simplePanel.classList.add('hidden'); }
+      document.title = 'Focus Split';
+    });
+  });
+
+  // ---------- SIMPLE TIMER ----------
+  (function(){
+    var totalSec = 25*60, remaining = totalSec, running = false, intervalId = null;
+    var ring = document.getElementById('simpleRing');
+    var timeEl = document.getElementById('simpleTime');
+    var startBtn = document.getElementById('simpleStart');
+    var resetBtn = document.getElementById('simpleReset');
+    var presetsWrap = document.getElementById('simplePresets');
+    var customBtn = document.getElementById('customSimpleBtn');
+
+    function render(){
+      timeEl.textContent = fmt(remaining);
+      setRing(ring, remaining/totalSec);
+      if(running) document.title = fmt(remaining) + ' · Focus';
+    }
+    function tick(){
+      remaining -= 1;
+      if(remaining <= 0){
+        chime();
+        stop();
+        remaining = 0;
+        render();
+        return;
+      }
+      render();
+    }
+    function start(){
+      if(running) return;
+      running = true;
+      startBtn.textContent = 'Pause';
+      startBtn.classList.add('running');
+      intervalId = setInterval(tick, 1000);
+    }
+    function stop(){
+      running = false;
+      startBtn.textContent = 'Start';
+      startBtn.classList.remove('running');
+      if(intervalId) clearInterval(intervalId);
+      intervalId = null;
+      document.title = 'Focus Split';
+    }
+    startBtn.addEventListener('click', function(){ running ? stop() : start(); });
+    resetBtn.addEventListener('click', function(){ stop(); remaining = totalSec; render(); });
+    presetsWrap.querySelectorAll('button[data-min]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        stop();
+        presetsWrap.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        totalSec = parseInt(btn.dataset.min, 10) * 60;
+        remaining = totalSec;
+        render();
+      });
+    });
+    customBtn.addEventListener('click', function(){
+      var val = prompt_fallback();
+      function prompt_fallback(){
+        var input = window.prompt ? window.prompt('Custom focus length in minutes', '30') : null;
+        return input;
+      }
+      var mins = parseInt(val, 10);
+      if(!isNaN(mins) && mins > 0){
+        stop();
+        presetsWrap.querySelectorAll('button[data-min]').forEach(function(b){ b.classList.remove('active'); });
+        totalSec = mins * 60;
+        remaining = totalSec;
+        render();
+      }
+    });
+    render();
+  })();
+
+  // ---------- SPLIT SEQUENCE ----------
+  (function(){
+    var focusInput = document.getElementById('splitFocus');
+    var breakInput = document.getElementById('splitBreak');
+    var cyclesInput = document.getElementById('splitCycles');
+    var ring = document.getElementById('splitRing');
+    var timeEl = document.getElementById('splitTime');
+    var phaseLabel = document.getElementById('splitPhaseLabel');
+    var dotsWrap = document.getElementById('cycleDots');
+    var startBtn = document.getElementById('splitStart');
+    var resetBtn = document.getElementById('splitReset');
+
+    var sequence = [], seqIndex = 0, remaining = 0, totalForPhase = 0, running = false, intervalId = null;
+
+    function buildSequence(){
+      var focusMin = Math.max(1, parseInt(focusInput.value,10) || 50);
+      var breakMin = Math.max(1, parseInt(breakInput.value,10) || 10);
+      var cycles = Math.max(1, parseInt(cyclesInput.value,10) || 4);
+      sequence = [];
+      for(var i=0;i<cycles;i++){
+        sequence.push({label:'Focus', sec: focusMin*60, cycle:i});
+        if(i < cycles-1) sequence.push({label:'Break', sec: breakMin*60, cycle:i});
+      }
+      return cycles;
+    }
+    function renderDots(cycles){
+      dotsWrap.innerHTML = '';
+      for(var i=0;i<cycles;i++){
+        var span = document.createElement('span');
+        dotsWrap.appendChild(span);
+      }
+      updateDots();
+    }
+    function updateDots(){
+      var spans = dotsWrap.querySelectorAll('span');
+      var currentCycle = sequence[seqIndex] ? sequence[seqIndex].cycle : spans.length;
+      spans.forEach(function(sp, i){
+        sp.classList.remove('done','current');
+        if(i < currentCycle) sp.classList.add('done');
+        else if(i === currentCycle) sp.classList.add('current');
+      });
+    }
+    function render(){
+      timeEl.textContent = fmt(remaining);
+      setRing(ring, totalForPhase ? remaining/totalForPhase : 0);
+      var phase = sequence[seqIndex];
+      if(phase){
+        phaseLabel.textContent = phase.label + ' · ' + (phase.cycle+1) + ' of ' + (parseInt(cyclesInput.value,10)||sequence.length);
+        if(running) document.title = fmt(remaining) + ' · ' + phase.label;
+      } else {
+        phaseLabel.textContent = 'Done';
+        document.title = 'Focus Split';
+      }
+      updateDots();
+    }
+    function loadPhase(){
+      var phase = sequence[seqIndex];
+      if(!phase){ finish(); return; }
+      remaining = phase.sec;
+      totalForPhase = phase.sec;
+      render();
+    }
+    function finish(){
+      stop();
+      phaseLabel.textContent = 'Sequence complete';
+      timeEl.textContent = '00:00';
+      setRing(ring, 0);
+    }
+    function tick(){
+      remaining -= 1;
+      if(remaining <= 0){
+        chime();
+        seqIndex += 1;
+        if(seqIndex >= sequence.length){ finish(); return; }
+        loadPhase();
+        return;
+      }
+      render();
+    }
+    function start(){
+      if(running) return;
+      if(sequence.length === 0){
+        var cycles = buildSequence();
+        renderDots(cycles);
+        seqIndex = 0;
+        loadPhase();
+      }
+      running = true;
+      startBtn.textContent = 'Pause';
+      startBtn.classList.add('running');
+      focusInput.disabled = breakInput.disabled = cyclesInput.disabled = true;
+      intervalId = setInterval(tick, 1000);
+    }
+    function stop(){
+      running = false;
+      startBtn.textContent = sequence.length ? 'Resume' : 'Start sequence';
+      startBtn.classList.remove('running');
+      if(intervalId) clearInterval(intervalId);
+      intervalId = null;
+      document.title = 'Focus Split';
+    }
+    function fullReset(){
+      stop();
+      sequence = [];
+      seqIndex = 0;
+      focusInput.disabled = breakInput.disabled = cyclesInput.disabled = false;
+      var cycles = buildSequence();
+      sequence = [];
+      renderDots(cycles);
+      remaining = (parseInt(focusInput.value,10)||50) * 60;
+      totalForPhase = remaining;
+      timeEl.textContent = fmt(remaining);
+      setRing(ring, 1);
+      phaseLabel.textContent = 'Focus · 1 of ' + cycles;
+      startBtn.textContent = 'Start sequence';
+    }
+
+    startBtn.addEventListener('click', function(){ running ? stop() : start(); });
+    resetBtn.addEventListener('click', fullReset);
+    [focusInput, breakInput, cyclesInput].forEach(function(inp){
+      inp.addEventListener('change', function(){ if(!running) fullReset(); });
+    });
+
+    fullReset();
+  })();
+
+})();
+</script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Focus Split</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* layout: single centered card; segmented mode switch up top; big tabular-num ring timer; quiet monochrome with one restrained accent on the active ring/button */
+:root{
+  --bg:#fafaf9; --surface:#ffffff; --fg:#17161a; --muted:#78767d;
+  --border:#e4e2df; --accent:#4f5bd5; --accent-fg:#ffffff; --ring-track:#e9e7e3;
+  --danger:#c75146;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c0c0d; --surface:#161617; --fg:#f2f1ee; --muted:#8c8a90;
+    --border:#2a2a2c; --accent:#8b93ef; --accent-fg:#0c0c0d; --ring-track:#2a2a2c;
+    --danger:#e08176;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c0c0d; --surface:#161617; --fg:#f2f1ee; --muted:#8c8a90;
+  --border:#2a2a2c; --accent:#8b93ef; --accent-fg:#0c0c0d; --ring-track:#2a2a2c;
+  --danger:#e08176;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+html,body{height:100%; margin:0;}
+body{background:var(--bg); color:var(--fg); font-family:'Manrope',system-ui,sans-serif; -webkit-font-smoothing:antialiased;}
+.app{
+  min-height:100%; display:flex; flex-direction:column; align-items:center;
+  padding:32px 20px;
+  gap:28px;
+}
+header{
+  width:100%; max-width:420px; display:flex; align-items:center; justify-content:space-between;
+}
+.brand{font-size:13px; font-weight:700; letter-spacing:0.18em; color:var(--muted);}
+#themeToggle, #fullscreenToggle{
+  width:36px; height:36px; border-radius:999px; border:1px solid var(--border); background:var(--surface);
+  color:var(--fg); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:border-color .15s;
+}
+#themeToggle:hover, #fullscreenToggle:hover{border-color:var(--muted);}
+.header-actions{display:flex; gap:8px;}
+
+.mode-switch{
+  display:flex; gap:4px; padding:4px; border:1px solid var(--border); border-radius:999px; background:var(--surface);
+}
+.mode-btn{
+  border:none; background:transparent; color:var(--muted); font-family:inherit; font-size:13px; font-weight:600;
+  letter-spacing:0.03em; padding:8px 22px; border-radius:999px; cursor:pointer; transition:background .15s, color .15s;
+}
+.mode-btn.active{background:var(--fg); color:var(--bg);}
+
+main{width:100%; max-width:420px; display:flex; flex-direction:column; align-items:center;}
+.panel{width:100%; display:flex; flex-direction:column; align-items:center; gap:24px;}
+.panel.hidden{display:none;}
+
+.duration-presets{display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
+.duration-presets button{
+  border:1px solid var(--border); background:var(--surface); color:var(--fg); font-family:'IBM Plex Mono',monospace;
+  font-size:13px; padding:8px 14px; border-radius:10px; cursor:pointer; min-width:44px;
+}
+.duration-presets button.active{background:var(--accent); border-color:var(--accent); color:var(--accent-fg);}
+.duration-presets button.custom{font-family:'Manrope',sans-serif; font-weight:600;}
+
+.split-config{
+  width:100%; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+  border:1px solid var(--border); background:var(--surface); border-radius:14px; padding:16px;
+}
+.field{display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0;}
+.field label{font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);}
+.field input{
+  width:64px; border:1px solid var(--border); background:var(--bg); color:var(--fg);
+  border-radius:8px; padding:6px 8px; font-family:'IBM Plex Mono',monospace; font-size:14px;
+}
+.field input:focus{outline:2px solid var(--accent); outline-offset:1px;}
+
+.timer-display{position:relative; width:260px; height:260px; display:flex; align-items:center; justify-content:center;}
+.ring{position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ring-track); stroke-width:6;}
+.ring-progress{fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .3s linear;}
+.time-text{
+  font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums; font-size:52px; font-weight:500;
+  letter-spacing:-0.02em; position:relative; top:-8px;
+}
+.phase-label{
+  position:absolute; bottom:58px; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted); text-align:center; width:200px;
+}
+
+.cycle-dots{display:flex; gap:7px;}
+.cycle-dots span{width:7px; height:7px; border-radius:999px; background:var(--ring-track);}
+.cycle-dots span.done{background:var(--accent);}
+.cycle-dots span.current{background:var(--fg);}
+
+.controls{display:flex; gap:10px;}
+.controls button{
+  font-family:inherit; font-size:14px; font-weight:700; letter-spacing:0.02em; border-radius:999px;
+  padding:12px 30px; border:1px solid transparent; cursor:pointer; transition:opacity .15s;
+}
+.controls button#simpleStart, .controls button#splitStart{background:var(--fg); color:var(--bg);}
+.controls button#simpleStart.running, .controls button#splitStart.running{background:var(--danger); color:#fff;}
+.controls button.ghost{background:transparent; border-color:var(--border); color:var(--fg);}
+.controls button:hover{opacity:0.85;}
+
+footer{font-size:11px; color:var(--muted); letter-spacing:0.02em;}
+
+@media (max-width:460px){
+  .timer-display{width:220px; height:220px;}
+  .time-text{font-size:42px;}
+}
 </style>
 </head>
 <body>
